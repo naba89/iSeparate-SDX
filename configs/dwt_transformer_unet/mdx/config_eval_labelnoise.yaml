@@ -1,0 +1,41 @@
+model_module: iSeparate.models.dwt_transformer_unet.dwt_transformer_unet
+model_name: DWTTransformerUNet
+state_type: ema_batch_0    # or state_dict
+models:
+  - exp_mdx/DWTTransformerUNet/all_targets_labelnoise/checkpoint_DWTTransformerUNet_last.pt
+
+eval_metric: global_sdr
+reduction: mean
+save_eval_wavs: false
+save_dir: file_lists/moisesdb23_labelnoise_v1.0_sep_dwt
+eval_params:
+  patch_length: 10
+  hop_length: 1
+  sr: 44100
+  use_window: false
+  shifts: 0
+
+
+# data loader arguments
+data_loader_args:
+  test_loader: stem_folder_dataloader
+
+  # for validation datapipe
+  test:
+    data_roots:
+      - DATASETS/SDX2023/moisesdb23_labelnoise_v1.0
+    metadata_file_prefix: moisesdb23_labelnoise_v1
+    noisy: []
+    mixing_sources: [ 'vocals', 'drums', 'bass', 'other' ]
+    sample_rate: 44100
+    mono: false
+    segment_length: null
+    normalize: false
+    center: true
+    shuffle: false
+    random_segments: false
+    num_workers: 16
+    cycle: false
+    drop_last: false
+    return_song_name: true
+    filter_silence: false

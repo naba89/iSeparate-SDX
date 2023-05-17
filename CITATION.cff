@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Goswami"
+  given-names: "Nabarun"
+  affiliation: "Harada-Osa-Mukuta-Kurose Lab, The University of Tokyo"
+  email: "nabarungoswami@mi.t.u-tokyo.ac.jp"
+title: "iSeparate-SDX"
+version: 1
+date-released: 2023-05-17
+url: "https://github.com/naba89/iSeparate-SDX"

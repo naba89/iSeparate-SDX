@@ -1,0 +1,182 @@
+# experiment params
+exp_dir: exp_mdx/               # Path to the directory where the training logs and checkpoints will be stored
+
+model_name: DWTTransformerUNet          # This choice affects choice of models and loss functions in code
+
+exp_name: all_targets_bleeding       # This will create a directory under the 'exp_dir/model_name',
+                            # change this for different experiments
+
+cpu_run: false              # Whether to turn off GPU use
+seed: 42
+
+disable_pbar: false
+
+# optimization params
+epochs: 223              # number of epochs
+lr: 0.0003                  # initial learning rate
+
+scheduler: null
+
+optimizer: Adam
+optimizer_args:
+  betas: [0.9, 0.999]
+  weight_decay: 0
+  amsgrad: false
+  fused: true
+#grad_clip_norm: 5.0
+
+
+min_lr: 7e-5                # minimum learning rate
+use_previous_lr: false
+batch_size: 16              # batch size
+num_batches_per_epoch: 2500
+amp: false                   # whether to use automatic mixed precision training
+
+
+# checkpoint and validation params
+checkpoint_path: ''         # provide checkpoint path if you want to restart training or finetune
+resume_from_last: false     # if true, finds the last checkpoint in the current experiment directory and resumes
+save_interval: 1          # Number of  epochs before saving a checkpoint
+eval_interval: 1          # Number of epochs before running validation
+audio_log_interval: 1      # Number of epochs before logging audio
+num_workers: 32             # Number of workers for training data loading
+
+loss_fn: l1_with_mean_teacher_v2          # which loss function to use, check losses/loss_switcher.py
+# 0: l1_loss
+# 1: mix_l1
+# 2: mixit
+# 3: mean teacher
+loss_weights: [[1, 0, 2, 0], [0.5, 0.5, 2, 0.5], [0, 1, 2, 1]]
+loss_weights_milestones: [30, 50]
+mean_teacher_interval: 2
+
+skip_eval: true            # whether to skip evaluation
+eval_metric: global_sdr
+val_patch_length: 7       # if null, use full length validation, else use this length for validation
+val_hop_length: 1
+use_window: false
+val_shift: 0
+save_eval_wavs: false
+
+
+# ema params:
+ema:
+  batch: [0.9995]
+  epoch: []
+# the following parameters are passed directly as key-value arguments to the respective class init functions
+# so please be careful, the names are actual function argument names.
+
+# model parameters, check specific model class for more details
+model_args:
+  audio_channels: 1
+  target_sources: ['vocals', 'drums', 'bass', 'other']
+  mixing_sources: ['vocals', 'drums', 'bass', 'other']
+  levels: 7
+  wave:  sym7
+  hidden_size_tsfmr: 384
+  wavelet_enc_channels_dwt:
+#    - [[192, 2], [384, 2]]                             # /256   remaining 1024/256 = 4
+    - [[96, 2], [192, 2], [384, 2]]                     # /128   remaining 1024/128 = 8
+    - [[96, 2], [192, 2], [384, 2]]                     # /128   remaining 1024/128 = 8
+    - [[96, 4], [192, 2], [384, 2]]                     # /64    remaining 1024/64 = 16
+    - [[96, 4], [192, 4], [384, 2]]                     # /32    remaining 1024/32 = 32
+    - [[96, 4], [192, 4], [384, 4]]                     # /16    remaining 1024/16 = 64
+    - [[48, 4], [96, 4], [192, 4], [384, 2]]            # /8     remaining 1024/8 = 128
+    - [[48, 4], [96, 4], [192, 4], [384, 4]]            # /4     remaining 1024/4 = 256
+    - [[24, 4], [48, 4], [96, 4], [192, 4], [384, 2]]   # /2     remaining 1024/2 = 512
+  time_enc_channels: [[ 24, 4 ], [ 48, 4 ], [ 96, 4 ], [ 192, 4 ], [ 384, 4 ] ]
+  norm_starts: 1000
+  rescale: 0.1
+  lstm_starts: null
+  attn_starts: null
+  use_output_filter: false
+  independent_post_filter: true
+  wavelet_aug: true
+  encoder_params:
+    kernel_size: 8
+    residual_params:
+      depth: 2
+      compress: 4
+      kernel_size: 3
+      init: 0.001
+    context: 0
+    norm_groups: 4
+  decoder_params:
+    kernel_size: 8
+    residual_params:
+      depth: 2
+      compress: 4
+      kernel_size: 3
+      init: 0.001
+    context: 1
+    norm_groups: 4
+  cross_transformer_params:
+    # general
+    layer_scale: True
+    gelu: True
+    hidden_scale: 4
+    num_heads: 8
+    num_layers: 5
+    dropout: 0.02
+    # cross first False
+    cross_first: False
+
+    # positional embedding
+    emb: sin
+    max_positions: 10000
+    max_period: 10000.0
+    sin_random_shift: 0
+    weight_pos_embed: 1.0
+    cape_mean_normalize: True
+    cape_augment: True
+    cape_glob_loc_scale: [ 5000.0, 1.0, 1.4 ]
+
+    # norm before encoder
+    norm_in: True
+    norm_in_group: False
+
+    # norm inside encoder
+    group_norm: False
+    norm_first: True
+    norm_out: True
+
+    # optim
+    weight_decay: 0
+    lr: null
+  augmentations:
+    Remix:
+      proba: 1
+      group_size: 4
+    RandomGain:
+      p: 1
+      high: 1.25
+      low: 0.25
+    RandomSignFlip: {}
+
+
+# data loader arguments
+data_loader_args:
+
+  train_loader: random_mix_training_dataloader
+  val_loader: stem_folder_dataloader
+
+  # for training data loader
+  train:
+    data_roots:
+      - DATASETS/SDX2023/moisesdb23_bleeding_v1.0
+    metadata_file_prefix: train
+    noisy: []
+    mixing_sources: ['vocals', 'drums', 'bass', 'other']
+    sample_rate: 44100
+    mono: false
+    segment_length: 7
+    normalize: true
+    center: false
+    shuffle: true
+    random_segments: true
+    num_workers: 32
+    cycle: true
+    drop_last: true
+    return_song_name: false
+    filter_silence: true
+    cpu_aug: true

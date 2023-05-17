@@ -1,0 +1,132 @@
+# experiment params
+exp_dir: exp_cdx/               # Path to the directory where the training logs and checkpoints will be stored
+
+model_name: BSRNN          # This choice affects choice of models in code
+
+exp_name: sfx       # This will create a directory under the 'exp_dir/model_name',
+                            # change this for different experiments
+
+cpu_run: false              # Whether to turn off GPU use
+seed: 42                    # Seed for all random number generators for reproducibility
+
+disable_pbar: false
+
+
+# optimization params
+epochs: 301              # number of epochs
+lr: 0.001                  # initial learning rate
+flooding: 0.1
+
+scheduler: StepLR
+scheduler_params:
+  step_size: 2
+  gamma: 0.98
+
+#scheduler: null
+optimizer: Adam
+optimizer_args:
+  betas: [0.9, 0.999]
+  weight_decay: 0
+  amsgrad: false
+  fused: true
+grad_clip_norm: 5.0
+
+
+min_lr: 7e-5                # minimum learning rate
+use_previous_lr: false
+batch_size: 64              # batch size
+num_batches_per_epoch: 625
+amp: false                   # whether to use automatic mixed precision training
+
+
+# checkpoint and validation params
+checkpoint_path: ''         # provide checkpoint path if you want to restart training or finetune
+resume_from_last: false     # if true, finds the last checkpoint in the current experiment directory and resumes
+save_interval: 5          # Number of  epochs before saving a checkpoint
+eval_interval: 5          # Number of epochs before running validation
+audio_log_interval: 1      # Number of epochs before logging audio
+num_workers: 32             # Number of workers for training data loading
+
+
+loss_fn: bsrnn_l1          # which loss function to use, check losses/loss_switcher.py
+eval_metric: global_sdr
+val_patch_length: 3       # if null, use full length validation, else use this length for validation
+val_hop_length: 1
+use_window: false
+val_shift: 0
+save_eval_wavs: false
+
+
+# ema params:
+ema:
+  batch: [0.9995]
+  epoch: []
+# the following parameters are passed directly as key-value arguments to the respective class init functions
+# so please be careful, the names are actual function argument names.
+
+# model parameters, check specific model class for more details
+model_args:
+  target_sources: ['sfx']
+  mixing_sources: [ 'music', 'speech', 'sfx' ]
+  sr: 44100
+  win: 1600
+  stride: 400
+  feature_dim: 128
+  num_repeat: 6
+  augmentations:
+    Remix:
+      proba: 1
+      group_size: 4
+    RandomGain:
+      p: 1
+      high: 1.25
+      low: 0.25
+    RandomSignFlip: {}
+
+
+# data loader arguments
+data_loader_args:
+
+  train_loader: random_mix_training_dataloader
+  val_loader: stem_folder_dataloader
+
+  # for training data loader
+  train:
+    data_roots:
+      - DATASETS/DnR/tr_silence_removed
+    metadata_file_prefix: train
+    noisy: []
+    mixing_sources: [ 'music', 'speech', 'sfx' ]
+    sample_rate: 44100
+    mono: true
+    segment_length: 3
+    normalize: true
+    center: false
+    shuffle: true
+    random_segments: true
+    num_workers: 32
+    cycle: true
+    drop_last: true
+    return_song_name: false
+    filter_silence: true
+    cpu_aug: false
+
+  # for validation datapipe
+  validation:
+    data_roots:
+      - DATASETS/DnR/dnr_v2/sdx_valid
+    metadata_file_prefix: val
+    noisy: []
+    mixing_sources: [ 'music', 'speech', 'sfx' ]
+    sample_rate: 44100
+    mono: true
+    segment_length: null
+    normalize: false
+    center: true
+    shuffle: false
+    random_segments: false
+    num_workers: 1
+    cycle: false
+    drop_last: false
+    return_song_name: true
+    filter_silence: false
