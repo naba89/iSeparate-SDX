@@ -1,7 +1,7 @@
 # iSeparate-SDX
 
 This library contains the code to train and reproduce the results for
-the submissions by username: `subatomicseer`
+the submissions by username: `subatomicseer` for the [SDX 2023 Challenge](https://www.aicrowd.com/challenges/sound-demixing-challenge-2023)
 
 **Author**: Nabarun Goswami
 
