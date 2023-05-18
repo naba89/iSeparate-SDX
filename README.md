@@ -11,7 +11,7 @@ the submissions by username: `subatomicseer` for the [SDX 2023 Challenge](https:
 
 * MDX Leaderboard A (labelnoise)
     * Submission repo: [MDX2023-labelnoise-submission](https://gitlab.aicrowd.com/subatomicseer/MDX2023-labelnoise-submission)
-	* Submission ID: 220423
+	* Submission ID: [220423](https://www.aicrowd.com/challenges/sound-demixing-challenge-2023/problems/music-demixing-track-mdx-23/submissions/220423)
 	* Submitter: subatomicseer
 	* Final rank: 2nd place
     * Final scores:
@@ -23,7 +23,7 @@ the submissions by username: `subatomicseer` for the [SDX 2023 Challenge](https:
 	  	  
 * MDX Leaderboard B (bleeding)
     * Submission repo: [MDX2023-bleeding-submission](https://gitlab.aicrowd.com/subatomicseer/MDX2023-bleeding-submission)
-	* Submission ID: 220344
+	* Submission ID: [220344](https://www.aicrowd.com/challenges/sound-demixing-challenge-2023/problems/music-demixing-track-mdx-23/submissions/220344)
 	* Submitter: subatomicseer
 	* Final rank: 3rd place
 	* Final scores:
@@ -34,7 +34,7 @@ the submissions by username: `subatomicseer` for the [SDX 2023 Challenge](https:
 
 * MDX Leaderboard C (Open)
     * Submission repo: [MDX2023-external-data-submission](https://gitlab.aicrowd.com/subatomicseer/mdx2023-external-data-submission)
-    * Submission ID: 220008
+    * Submission ID: [220008](https://www.aicrowd.com/challenges/sound-demixing-challenge-2023/problems/music-demixing-track-mdx-23/submissions/220008)
     * Submitter: subatomicseer
     * Final rank: 8th place
     * Final scores:
@@ -45,7 +45,7 @@ the submissions by username: `subatomicseer` for the [SDX 2023 Challenge](https:
 
 * CDX Leaderboard A and B
     * Submission repo: [CDX2023-dnr-submission](https://gitlab.aicrowd.com/subatomicseer/CDX2023-dnr-submission)
-    * Submission ID: 220293
+    * Submission ID: [220293](https://www.aicrowd.com/challenges/sound-demixing-challenge-2023/problems/cinematic-sound-demixing-track-cdx-23/submissions/220293)
     * Submitter: subatomicseer
     * Final rank: 3rd place (A), 6th place (B)
     * Final scores:
