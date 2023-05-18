@@ -86,6 +86,10 @@ All datasets are assumed to be in a directory named `DATASETS` in the root direc
 - `DATASETS/DnR/dnr_v2`
 - `DATASETS/MUSDB-HQ`
 
+Either copy the datasets to the above locations, or create symbolic links to the datasets, 
+or you can change the dataset paths in the config files and pre-processing scripts.
+
+
 ### MDX track
 Leaderboard A (labelnoise): [docs/TRAINING(MDX-Labelnoise).md](docs/TRAINING(MDX-Labelnoise).md)
 
@@ -96,11 +100,6 @@ Leaderboard C (Open): [docs/TRAINING(MDX-Open).md](docs/TRAINING(MDX-Open).md)
 ### CDX track
 Leaderboard A and B: [docs/TRAINING(CDX-DnR).md](docs/TRAINING(CDX-DnR).md)
 
-
-
-
-Either copy the datasets to the above locations, or create symbolic links to the datasets, 
-or you can change the dataset paths in the config files and pre-processing scripts.
 
 
 ## References
