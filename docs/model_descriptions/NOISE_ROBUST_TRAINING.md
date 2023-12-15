@@ -48,7 +48,7 @@ The loss function was composed of the following components
 
 These loss components were weighted and applied with the following schedule and weights
 
-| Epochs | L1  | L1 Mixture | MixIt | Mean Teacher |
+| Epochs | L1  | Mixture Consistence | MixIt | Mean Teacher |
 |:------:|:---:|:----------:|:-----:|:------------:|
 |  ~30   |  1  |     0      |   2   |      0       |
 | 31-50  | 0.5 |    0.5     |   2   |     0.5      |
